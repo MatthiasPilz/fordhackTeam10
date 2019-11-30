@@ -21,23 +21,13 @@ def create_parkingBays(filename):
                     temp.append([geo[0][1], geo[0][0]])
                     temp.append([geo[1][1], geo[1][0]])
 
-                    #result[count] = [geo[0][1], geo[0][0]]
-                    #result[count].append([geo[1][1], geo[1][0]])
                     result[count] = temp
                     count += 1
 
         return(result)
-    '''
-        f = open("camdenParkingBays.txt", "w+")
-        for i in range(len(result)):
-            f.write(str(i) + ' ' + str(result[i]) + "\n")
-        f.close()
-        
-        f = open("camdenParkingBaysCenters.txt", "w+")
-        for i in range(len(bays)):
-            f.write(str(i) + ' ' + str(bays[i]) + "\n")
-        f.close()
-    '''
+
+# ######################################################################################################################
+
 
 def load_lampData(filename):
     data = open(filename, 'r')
@@ -53,6 +43,9 @@ def load_lampData(filename):
     data.close()
     return lamps
 
+# ######################################################################################################################
+
+
 def simplify_parkingBays( bays ):
     result = []
 
@@ -63,10 +56,13 @@ def simplify_parkingBays( bays ):
 
     return result
 
+# ######################################################################################################################
+
+
 def calc_distance(i, j):
-    #dist = ( (i[0]-i[1])^2 + (j[0]-j[1])^2 )**(0.5)
-    #return dist*11000
     return (great_circle(i,j).km*1000)
+
+# ######################################################################################################################
 
 
 def calc_scoreOfLamps( lamps, bays ):
@@ -88,6 +84,8 @@ def calc_scoreOfLamps( lamps, bays ):
         result.append(countList[i]/maximum)
 
     return result
+
+# ######################################################################################################################
 
 
 def load_crimeData(filename):
@@ -119,11 +117,13 @@ def load_crimeData(filename):
 
     return result
 
+# ######################################################################################################################
+
+
 def calc_scoreOfCrime(crime, bays):
     countList = []
     crimeRadius = 50
 
-    #for n in range(len(bays)//30):
     for i in bays:
         count = 0
         for j in crime:
@@ -133,8 +133,6 @@ def calc_scoreOfCrime(crime, bays):
 
         countList.append(count)
 
-    #print(countList)
-
     maximum = max(countList)
     result = []
     for i in range(len(countList)):
@@ -142,11 +140,19 @@ def calc_scoreOfCrime(crime, bays):
 
     return result
 
+# ######################################################################################################################
+
+
 def write_file( table, name ):
     f = open(name, "w+")
     for i in range(len(table)):
         f.write(str(i) + ' ' + str(table[i]) + "\n")
     f.close()
+
+# ######################################################################################################################
+# ######################################################################################################################
+# ######################################################################################################################
+
 
 if __name__ == "__main__":
     #lamps = load_lampData("lamp_position.txt")
