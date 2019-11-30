@@ -122,7 +122,7 @@ def load_crimeData(filename):
 
 def calc_scoreOfCrime(crime, bays):
     countList = []
-    crimeRadius = 50
+    crimeRadius = 70
 
     for i in bays:
         count = 0
@@ -166,7 +166,7 @@ if __name__ == "__main__":
         temp = [bays[i], crimeScore[i]]
         result.append( temp )
 
-    write_file( result, "crimeScoring.txt" )
+    write_file( result, "crimeScoring_70.txt" )
 
 
     #score = calc_scoreOfLamps(lamps, bays)
