@@ -69,7 +69,7 @@ def calc_distance(i, j):
     return (great_circle(i,j).km*1000)
 
 
-def calc_scoreOfBay( lamps, bays ):
+def calc_scoreOfLamps( lamps, bays ):
     countList = []
     r = 50
     for i in bays:
@@ -90,9 +90,77 @@ def calc_scoreOfBay( lamps, bays ):
     return result
 
 
+def load_crimeData(filename):
+    d = {}
+    d['violent-crime'] = 5
+    d['other-crime'] = 0
+    d['burglary'] = 0
+    d['drugs'] = 2
+    d['anti-social-behaviour'] = 1
+    d['criminal-damage-arson'] = 4
+    d['possession-of-weapons'] = 5
+    d['public-order'] = 1
+    d['bicycle-theft'] = 0
+    d['other-theft'] = 0
+    d['shoplifting'] = 0
+    d['theft-from-the-person'] = 0
+    d['vehicle-crime'] = 4
+    d['robbery'] = 5
+
+    result = []
+    with open(filename) as json_file:
+        data = json.load(json_file)
+
+        for line in data:
+            x = float(line['latitude'])
+            y = float(line['longitude'])
+            t = int(d[line['category']])
+            result.append( [x,y,t] )
+
+    return result
+
+def calc_scoreOfCrime(crime, bays):
+    countList = []
+    crimeRadius = 50
+
+    #for n in range(len(bays)//30):
+    for i in bays:
+        count = 0
+        for j in crime:
+            dist = calc_distance(i, [j[0],j[1]])
+            if (dist < crimeRadius):
+                count += j[2]
+
+        countList.append(count)
+
+    #print(countList)
+
+    maximum = max(countList)
+    result = []
+    for i in range(len(countList)):
+        result.append(countList[i] / maximum)
+
+    return result
+
+def write_file( table, name ):
+    f = open(name, "w+")
+    for i in range(len(table)):
+        f.write(str(i) + ' ' + str(table[i]) + "\n")
+    f.close()
 
 if __name__ == "__main__":
-    lamps = load_lampData("lamp_position.txt")
-    bays = simplify_parkingBays( create_parkingBays("camdenFeatures.txt") )
+    #lamps = load_lampData("lamp_position.txt")
 
-    score = calc_scoreOfBay(lamps, bays)
+    bays = simplify_parkingBays( create_parkingBays("camdenFeatures.txt") )
+    crime = load_crimeData("crimeTypeByLocation.txt")
+    crimeScore = calc_scoreOfCrime( crime, bays )
+
+    result = []
+    for i in range(len(bays)):
+        temp = [bays[i], crimeScore[i]]
+        result.append( temp )
+
+    write_file( result, "crimeScoring.txt" )
+
+
+    #score = calc_scoreOfLamps(lamps, bays)
