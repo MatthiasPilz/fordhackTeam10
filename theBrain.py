@@ -32,6 +32,11 @@ def create_parkingBays(filename):
         for i in range(len(result)):
             f.write(str(i) + ' ' + str(result[i]) + "\n")
         f.close()
+        
+        f = open("camdenParkingBaysCenters.txt", "w+")
+        for i in range(len(bays)):
+            f.write(str(i) + ' ' + str(bays[i]) + "\n")
+        f.close()
     '''
 
 def load_lampData(filename):
@@ -65,7 +70,7 @@ def calc_distance(i, j):
 
 
 def calc_scoreOfBay( lamps, bays ):
-    result = []
+    countList = []
     r = 50
     for i in bays:
         #print(i)
@@ -75,19 +80,19 @@ def calc_scoreOfBay( lamps, bays ):
             if( dist < r ):
                 count += 1
 
-        result.append(count)
+        countList.append(count)
+
+    maximum = max(countList)
+    result = []
+    for i in range(len(countList)):
+        result.append(countList[i]/maximum)
 
     return result
 
-lamps = load_lampData("lamp_position.txt")
-bays = simplify_parkingBays( create_parkingBays("camdenFeatures.txt") )
 
-f = open("camdenParkingBaysCenters.txt", "w+")
-for i in range(len(bays)):
-    f.write(str(i) + ' ' + str(bays[i]) + "\n")
-f.close()
 
-score = calc_scoreOfBay(lamps, bays)
-print(score)
+if __name__ == "__main__":
+    lamps = load_lampData("lamp_position.txt")
+    bays = simplify_parkingBays( create_parkingBays("camdenFeatures.txt") )
 
-#print( create_parkingBays("camdenFeatures.txt") )
+    score = calc_scoreOfBay(lamps, bays)
