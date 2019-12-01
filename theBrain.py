@@ -17,9 +17,25 @@ def create_parkingBays(filename):
                     pay = reg[0]['payment']
                     geo = feature['geometry']['coordinates']
 
+                    # more potential information:
+                    maxStay = reg[0]['rule']['maxStay'] #--> classify!?
+                    print(maxStay)
+                    #pricePerHour = pay['rates'][0]['fees'][0] / pay['rates'][0]['durations'][0] * 60
+
+                    # create entry
                     temp = []
+                    # parking bay number
+                    #temp.append(count)
+
+                    # parking bay location
                     temp.append([geo[0][1], geo[0][0]])
                     temp.append([geo[1][1], geo[1][0]])
+
+                    # long or short maxStay time
+                    if ( maxStay <= 60 ):
+                        temp.append('short')
+                    else:
+                        temp.append('long')
 
                     result[count] = temp
                     count += 1
@@ -146,7 +162,7 @@ def calc_scoreOfCrime(crime, bays):
 def write_file( table, name ):
     f = open(name, "w+")
     for i in range(len(table)):
-        f.write(str(i) + ' ' + str(table[i]) + "\n")
+        f.write(str(table[i]) + "\n")
     f.close()
 
 # ######################################################################################################################
@@ -156,8 +172,12 @@ def write_file( table, name ):
 
 if __name__ == "__main__":
     #lamps = load_lampData("lamp_position.txt")
+    #create_parkingBays("camdenFeatures.txt")
+
 
     bays = simplify_parkingBays( create_parkingBays("camdenFeatures.txt") )
+    write_file( bays, "baysTest.txt" )
+'''
     crime = load_crimeData("crimeTypeByLocation.txt")
     crimeScore = calc_scoreOfCrime( crime, bays )
 
@@ -170,3 +190,4 @@ if __name__ == "__main__":
 
 
     #score = calc_scoreOfLamps(lamps, bays)
+'''
