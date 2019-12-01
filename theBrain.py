@@ -19,23 +19,46 @@ def create_parkingBays(filename):
 
                     # more potential information:
                     maxStay = reg[0]['rule']['maxStay'] #--> classify!?
-                    print(maxStay)
-                    #pricePerHour = pay['rates'][0]['fees'][0] / pay['rates'][0]['durations'][0] * 60
+                    pricePerHour = pay['rates'][0]['fees'][0] / pay['rates'][0]['durations'][0] * 60
+                    #method = pay['methods']
+                    try:
+                        url = prop['images'][0]
+                    except:
+                        url = ""
+
+                    timeFrom = reg[0]['timeSpans'][0]['timesOfDay']['from']
+                    timeTo = reg[0]['timeSpans'][0]['timesOfDay']['to']
 
                     # create entry
                     temp = []
                     # parking bay number
-                    #temp.append(count)
+                    temp.append(count)
 
                     # parking bay location
-                    temp.append([geo[0][1], geo[0][0]])
-                    temp.append([geo[1][1], geo[1][0]])
+                    avgx = 0.5*( geo[0][1] + geo[1][1] )
+                    avgy = 0.5*( geo[0][0] + geo[1][0] )
+                    #temp.append([geo[0][1], geo[0][0]])
+                    #temp.append([geo[1][1], geo[1][0]])
+                    temp.append([avgx, avgy])
 
                     # long or short maxStay time
                     if ( maxStay <= 60 ):
                         temp.append('short')
                     else:
                         temp.append('long')
+
+                    # price per hour
+                    temp.append(pricePerHour)
+
+                    # url to images
+                    temp.append(url)
+
+                    # time morning or not
+                    if ( timeTo <= "13:30" ):
+                        timeSpan = 'morning'
+                    else:
+                        timeSpan = 'allDay'
+                    temp.append(timeSpan)
 
                     result[count] = temp
                     count += 1
@@ -65,7 +88,7 @@ def load_lampData(filename):
 def simplify_parkingBays( bays ):
     result = []
 
-    for cord1, cord2 in bays:
+    for _, cord1, cord2, _, _, _, _ in bays:
         avgx = 0.5*( cord1[0] + cord2[0] )
         avgy = 0.5*( cord1[1] + cord2[1] )
         result.append([avgx, avgy])
@@ -143,7 +166,7 @@ def calc_scoreOfCrime(crime, bays):
     for i in bays:
         count = 0
         for j in crime:
-            dist = calc_distance(i, [j[0],j[1]])
+            dist = calc_distance([i[1][0], i[1][1]], [j[0],j[1]])
             if (dist < crimeRadius):
                 count += j[2]
 
@@ -172,22 +195,24 @@ def write_file( table, name ):
 
 if __name__ == "__main__":
     #lamps = load_lampData("lamp_position.txt")
-    #create_parkingBays("camdenFeatures.txt")
+    bays = create_parkingBays("camdenFeatures.txt")
 
 
-    bays = simplify_parkingBays( create_parkingBays("camdenFeatures.txt") )
-    write_file( bays, "baysTest.txt" )
-'''
+    #bays = simplify_parkingBays( create_parkingBays("camdenFeatures.txt") )
+    #write_file( bays, "baysTest.txt" )
+
     crime = load_crimeData("crimeTypeByLocation.txt")
     crimeScore = calc_scoreOfCrime( crime, bays )
 
     result = []
     for i in range(len(bays)):
-        temp = [bays[i], crimeScore[i]]
+        #temp = [bays[i], crimeScore[i]]
+        temp = [bays[i]]
+        temp.append(crimeScore[i])
         result.append( temp )
+        #result.append(bays[i], crimeScore[i])
 
-    write_file( result, "crimeScoring_70.txt" )
+    write_file( result, "crimeScoringNEW_70.txt" )
 
 
     #score = calc_scoreOfLamps(lamps, bays)
-'''
