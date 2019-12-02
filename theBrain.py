@@ -158,9 +158,9 @@ def load_crimeData(filename):
 # ######################################################################################################################
 
 
-def calc_scoreOfCrime(crime, bays):
+def calc_scoreOfCrime(crime, bays, radius):
     countList = []
-    crimeRadius = 70
+    crimeRadius = radius
 
     for i in bays:
         count = 0
@@ -196,22 +196,17 @@ if __name__ == "__main__":
     #lamps = load_lampData("./data/lamp_position.txt")
     bays = create_parkingBays("./data/camdenFeatures.txt")
 
-
-    #bays = simplify_parkingBays( create_parkingBays("./data/camdenFeatures.txt") )
-    #write_file( bays, "./data/baysTest.txt" )
-
     crime = load_crimeData("./data/crimeTypeByLocation.txt")
-    crimeScore = calc_scoreOfCrime( crime, bays )
+    radius = 70
+    crimeScore = calc_scoreOfCrime( crime, bays, radius )
 
     result = []
     for i in range(len(bays)):
-        #temp = [bays[i], crimeScore[i]]
-        temp = [bays[i]]
-        temp.append(crimeScore[i])
+        temp = [bays[i], crimeScore[i]]
         result.append( temp )
-        #result.append(bays[i], crimeScore[i])
 
-    write_file( result, "./data/crimeScoringNEW_70.txt" )
+    filename = "./data/test_" + str(radius) + ".txt"
+    write_file( result, filename )
 
 
     #score = calc_scoreOfLamps(lamps, bays)
