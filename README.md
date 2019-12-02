@@ -1,6 +1,8 @@
 # ParkSense
 The Ford KerbHack 2019
 
+![ParkSense_logo](ParkSenseLogo_small.png)
+
 Team 10 consisting of:
 - Max Hort (Data Scientist)
 - Janos Perei (Marketer)
