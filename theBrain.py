@@ -82,9 +82,8 @@ def load_lampData(filename):
     data.close()
     return lamps
 
+'''
 # ######################################################################################################################
-
-
 def simplify_parkingBays( bays ):
     result = []
 
@@ -94,8 +93,8 @@ def simplify_parkingBays( bays ):
         result.append([avgx, avgy])
 
     return result
-
 # ######################################################################################################################
+'''
 
 
 def calc_distance(i, j):
@@ -194,14 +193,14 @@ def write_file( table, name ):
 
 
 if __name__ == "__main__":
-    #lamps = load_lampData("lamp_position.txt")
-    bays = create_parkingBays("camdenFeatures.txt")
+    #lamps = load_lampData("./data/lamp_position.txt")
+    bays = create_parkingBays("./data/camdenFeatures.txt")
 
 
-    #bays = simplify_parkingBays( create_parkingBays("camdenFeatures.txt") )
-    #write_file( bays, "baysTest.txt" )
+    #bays = simplify_parkingBays( create_parkingBays("./data/camdenFeatures.txt") )
+    #write_file( bays, "./data/baysTest.txt" )
 
-    crime = load_crimeData("crimeTypeByLocation.txt")
+    crime = load_crimeData("./data/crimeTypeByLocation.txt")
     crimeScore = calc_scoreOfCrime( crime, bays )
 
     result = []
@@ -212,7 +211,7 @@ if __name__ == "__main__":
         result.append( temp )
         #result.append(bays[i], crimeScore[i])
 
-    write_file( result, "crimeScoringNEW_70.txt" )
+    write_file( result, "./data/crimeScoringNEW_70.txt" )
 
 
     #score = calc_scoreOfLamps(lamps, bays)
